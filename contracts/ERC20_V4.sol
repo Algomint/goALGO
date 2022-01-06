@@ -27,45 +27,44 @@ contract ERC20PresetMinterPauserUpgradeSafe is Initializable, ContextUpgradeable
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
     /**
+     * @dev Overrides the default decimals value of 18 
+     */
+    function decimals() public pure override returns (uint8) {
+        return 6;
+    }
+
+    /**
      * @dev Grants `DEFAULT_ADMIN_ROLE`, `MINTER_ROLE` and `PAUSER_ROLE` to the
      * account that deploys the contract.
      *
      * See {ERC20-constructor}.
      */
-
-    function initialize(string memory name, string memory symbol, address adminSafeAccount, address pauserSafeAccount) public {
-        __ERC20PresetMinterPauser_init(name, symbol,adminSafeAccount, pauserSafeAccount);
+    function initialize(string memory name, string memory symbol, address adminSafeAccount) public {
+        __ERC20PresetMinterPauser_init(name, symbol, adminSafeAccount);
     }
 
-    function __ERC20PresetMinterPauser_init(string memory name, string memory symbol, address adminSafeAccount, address pauserSafeAccount) internal initializer {
+    function __ERC20PresetMinterPauser_init(string memory name, string memory symbol, address adminSafeAccount) internal initializer {
         __Context_init_unchained();
         __AccessControl_init_unchained();
         __ERC20_init_unchained(name, symbol);
         __ERC20Burnable_init_unchained();
         __Pausable_init_unchained();
         __ERC20Pausable_init_unchained();
-        __ERC20PresetMinterPauser_init_unchained(adminSafeAccount, pauserSafeAccount);
-        
+        __ERC20PresetMinterPauser_init_unchained(adminSafeAccount);
     }
 
-    function __ERC20PresetMinterPauser_init_unchained(address adminSafeAccount, address pauserSafeAccount) internal initializer {
-
-
+    function __ERC20PresetMinterPauser_init_unchained(address adminSafeAccount) internal initializer {
         _setupRole(DEFAULT_ADMIN_ROLE, adminSafeAccount);
-        _setupRole(MINTER_ROLE, adminSafeAccount);
-        _setupRole(PAUSER_ROLE, pauserSafeAccount);
-
     }
-    
     
     /**
-     * @dev revoke Role adding controle
+     * @dev grant Role
      *
      * Requirements:
      *
      * - the caller must have the `PAUSER_ROLE`.
     */
-    function  grantRole(bytes32 role, address account) public override{
+    function grantRole(bytes32 role, address account) public override{
         if(role == PAUSER_ROLE && getRoleMemberCount(role) > 0)
             require(hasRole(PAUSER_ROLE, _msgSender()), "Only PAUSER_ROLE can change the PAUSER_ROLE");
         else
@@ -83,7 +82,7 @@ contract ERC20PresetMinterPauserUpgradeSafe is Initializable, ContextUpgradeable
     function revokeRole(bytes32 role, address account) public override {
         if(role == PAUSER_ROLE)
             require(false, "PAUSER_ROLE can't be revoked, it can only be renounced");
-        super.revokeRole(role,account);
+        super.revokeRole(role, account);
     }
     
     
@@ -98,6 +97,7 @@ contract ERC20PresetMinterPauserUpgradeSafe is Initializable, ContextUpgradeable
      */
     function mint(address to, uint256 amount) public {
         require(hasRole(MINTER_ROLE, _msgSender()), "ERC20PresetMinterPauser: must have minter role to mint");
+        // Override the decimals() function
         _mint(to, amount);
     }
 
