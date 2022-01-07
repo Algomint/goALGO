@@ -22,7 +22,9 @@ CONTRACT_NAME=
 TOKEN_NAME=
 TOKEN_SYMBOL=
 GNOSIS_SAFE_PROXY_ADMIN=
-### If upgrading contract versions
+GNOSIS_SAFE_CONTRACT_PAUSER=
+
+## If upgrading contract versions ##
 PROXY_CONTRACT_ADDRESS=
 ```
 
@@ -61,6 +63,11 @@ Once deployed, the deployer **must** transfer the ownership of the contract to a
 ```sh
 npx hardhat run scripts/transfer_ownership.js --network ropsten
 ```
+
+##### Check Roles Allocation
+On being initialized the first time, the contract will automatically grant the `ADMIN_ROLE` and `MINTER_ROLE` to the address provided as the third argument to the `initialize` function. The `PAUSER_ROLE` is also granted on initialization to the `pauserSafeAccount`, which is the fourth argument to the `initialize` function. 
+
+Please see the `deploy.js` script for how these arguments are passed to the contract during initialization.
 
 #### Upgrade contract
 ##### Compile contract and run tests
