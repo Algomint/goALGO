@@ -10,7 +10,7 @@ async function main() {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
   const Contract = await ethers.getContractFactory(contractName);
-  const contract = await upgrades.deployProxy(Contract, [ process.env.TOKEN_NAME, process.env.TOKEN_SYMBOL, deployer.address ]);
+  const contract = await upgrades.deployProxy(Contract, [ process.env.TOKEN_NAME, process.env.TOKEN_SYMBOL, process.env.GNOSIS_SAFE_CONTRACT_ADMIN ]);
   
   await contract.deployed();
   return contract
