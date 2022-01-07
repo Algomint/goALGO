@@ -39,23 +39,24 @@ contract ERC20PresetMinterPauserUpgradeSafe is Initializable, ContextUpgradeable
      *
      * See {ERC20-constructor}.
      */
-    function initialize(string memory name, string memory symbol, address adminSafeAccount) public {
-        __ERC20PresetMinterPauser_init(name, symbol, adminSafeAccount);
+    function initialize(string memory name, string memory symbol, address adminSafeAccount, address pauserSafeAccount) public {
+        __ERC20PresetMinterPauser_init(name, symbol, adminSafeAccount, pauserSafeAccount);
     }
 
-    function __ERC20PresetMinterPauser_init(string memory name, string memory symbol, address adminSafeAccount) internal initializer {
+    function __ERC20PresetMinterPauser_init(string memory name, string memory symbol, address adminSafeAccount, address pauserSafeAccount) internal initializer {
         __Context_init_unchained();
         __AccessControl_init_unchained();
         __ERC20_init_unchained(name, symbol);
         __ERC20Burnable_init_unchained();
         __Pausable_init_unchained();
         __ERC20Pausable_init_unchained();
-        __ERC20PresetMinterPauser_init_unchained(adminSafeAccount);
+        __ERC20PresetMinterPauser_init_unchained(adminSafeAccount, pauserSafeAccount);
     }
 
-    function __ERC20PresetMinterPauser_init_unchained(address adminSafeAccount) internal initializer {
+    function __ERC20PresetMinterPauser_init_unchained(address adminSafeAccount, address pauserSafeAccount) internal initializer {
         _setupRole(DEFAULT_ADMIN_ROLE, adminSafeAccount);
         _setupRole(MINTER_ROLE, adminSafeAccount);
+        _setupRole(PAUSER_ROLE, pauserSafeAccount);
     }
     
     /**
