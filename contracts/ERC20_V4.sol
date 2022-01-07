@@ -55,6 +55,7 @@ contract ERC20PresetMinterPauserUpgradeSafe is Initializable, ContextUpgradeable
 
     function __ERC20PresetMinterPauser_init_unchained(address adminSafeAccount) internal initializer {
         _setupRole(DEFAULT_ADMIN_ROLE, adminSafeAccount);
+        _setupRole(MINTER_ROLE, adminSafeAccount);
     }
     
     /**
