@@ -23,6 +23,14 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
     ropsten: {
       url: process.env.ROPSTEN_URL,
       accounts: [process.env.ROPSTEN_PRIVATE_KEY]
+    },
+    mainnet: {
+      url: process.env.MAINNET_URL,
+      accounts: [process.env.MAINNET_PRIVATE_KEY],
+      gas: 5000000,
+      gasPrice: 160 * 1000000000, // replace with current gasPrice
+      saveDeployments: true,
+      tags: ["production", "mainnet"]
     }
   },
   etherscan: {
